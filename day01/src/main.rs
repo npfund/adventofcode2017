@@ -31,14 +31,19 @@ fn part1(original_numbers: &Vec<u32>) -> u32{
         numbers.push(*original_numbers.first().unwrap())
     }
 
-    return numbers.into_iter().sum::<u32>();
+    return numbers.iter().sum::<u32>();
 }
 
 fn part2(original_numbers: &Vec<u32>) -> u32 {
     let length = original_numbers.len();
+    let skip = length / 2;
 
-
-    return 0;
+    return original_numbers.clone()
+        .into_iter()
+        .enumerate()
+        .filter(|&(i, number)| number == original_numbers[(i + skip) % length])
+        .map(|(_i, number)| number)
+        .sum::<u32>();
 }
 
 #[cfg(test)]

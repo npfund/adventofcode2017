@@ -11,6 +11,7 @@ fn main() {
         .collect::<Vec<char>>();
 
     println!("Total score is {}", part1(&chars));
+    println!("There are {} non-cancelled garbage characters", part2(&chars));
 }
 
 fn part1(chars: &Vec<char>) -> u32
@@ -44,6 +45,31 @@ fn part1(chars: &Vec<char>) -> u32
     return score;
 }
 
+fn part2(chars: &Vec<char>) -> u32
+{
+    let mut count: u32 = 0;
+    let mut in_garbage = false;
+
+    let mut c_iter = chars.iter();
+
+    while let Some(c) = c_iter.next() {
+        if in_garbage {
+            match *c {
+                '>' => in_garbage = false,
+                '!' => {c_iter.next();},
+                _ => count += 1,
+            }
+        } else {
+            match *c {
+                '<' => in_garbage = true,
+                _ => {},
+            }
+        }
+    }
+
+    return count;
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -74,5 +100,30 @@ mod test {
 
         let chars8 = vec!('{', '{', '<', 'a', '!', '>', '}', ',', '{', '<', 'a', '!', '>', '}', ',', '{', '<', 'a', '!', '>', '}', ',', '{', '<', 'a', 'b', '>', '}', '}');
         assert_eq!(3, part1(&chars8));
+    }
+
+    #[test]
+    fn part2_test()
+    {
+        let chars = vec!('<', '>');
+        assert_eq!(0, part2(&chars));
+
+        let chars2 = "<random characters>".chars().collect::<Vec<char>>();
+        assert_eq!(17, part2(&chars2));
+
+        let chars3 = "<<<<>".chars().collect::<Vec<char>>();
+        assert_eq!(3, part2(&chars3));
+
+        let chars4 = "<{!>}>".chars().collect::<Vec<char>>();
+        assert_eq!(2, part2(&chars4));
+
+        let chars5 = "<!!>".chars().collect::<Vec<char>>();
+        assert_eq!(0, part2(&chars5));
+
+        let chars6 = "<!!!>>".chars().collect::<Vec<char>>();
+        assert_eq!(0, part2(&chars6));
+
+        let chars7 = "<{o\"i!a,<{i<a>".chars().collect::<Vec<char>>();
+        assert_eq!(10, part2(&chars7));
     }
 }

@@ -5,3 +5,4 @@ authors = ["Nick Pfundstein <nickpfundstein@gmail.com>"]
 
 [dependencies]
 regex = "0.2"
+itertools = "0.7.3"
